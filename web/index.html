@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ICMP Network Lab</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer>
+</script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">
+<span class="brand-mark">↗</span> ICMP<span>Network Lab</span>
+</a>
+    <nav aria-label="Main navigation">
+<a href="#diagnostics">Diagnostics</a>
+</nav>
+    <span class="local-badge">
+<i>
+</i> Local tool · IPv4</span>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">COMPUTER NETWORKS PROJECT / 24BBS0181</p>
+      <h1>Network failure detection<span>with ICMP.</span>
+</h1>
+      <p class="intro">Check device reachability, latency and packet loss in one place.</p>
+      <div class="hero-tags">
+<span>Echo requests & replies</span>
+<span>Latency & packet loss</span>
+<span>Concurrent device checks</span>
+</div>
+      <div class="hero-art" aria-hidden="true">
+<div class="orbit o1">
+</div>
+<div class="orbit o2">
+</div>
+<span class="node n1">
+</span>
+<span class="node n2">
+</span>
+<span class="node n3">
+</span>
+<div class="art-core">ICMP<small>NETWORK LAYER</small>
+</div>
+</div>
+    </section>
+    <section id="diagnostics" class="workspace">
+      <div class="main-column">
+        <section class="panel check-panel">
+          <div class="section-heading">
+<div>
+<p class="eyebrow">01 / DIAGNOSTICS</p>
+<h2>Run a network check</h2>
+</div>
+<span class="pill">Real ICMP packets</span>
+</div>
+          <form id="check-form">
+            <label for="targets">Target IPv4 addresses</label>
+            <input id="targets" name="targets" value="127.0.0.1" placeholder="127.0.0.1, 1.1.1.1" required autocomplete="off" spellcheck="false">
+            <p class="field-help">Separate addresses with commas. Check up to 8 devices together.</p>
+            <div class="settings">
+              <div>
+<label for="count">Packets per target</label>
+<input id="count" type="number" value="5" min="1" max="10" step="1" required>
+</div>
+              <div>
+<label for="timeout">Timeout <small>seconds</small>
+</label>
+<input id="timeout" type="number" value="2" min="0.1" max="3" step="0.1" required>
+</div>
+              <div>
+<label for="ttl">TTL <small>router hop limit</small>
+</label>
+<input id="ttl" type="number" value="64" min="1" max="255" step="1" required>
+</div>
+            </div>
+            <div class="form-footer">
+<div class="presets">
+<span>Try:</span>
+<button type="button" data-preset="loopback">This computer</button>
+<button type="button" data-preset="timeout">Timeout target</button>
+<button type="button" data-preset="ttl">Low TTL</button>
+</div>
+<button id="start" class="primary" type="submit">Start check <span>↗</span>
+</button>
+</div>
+          </form>
+          <p id="notice" class="notice" role="status" aria-live="polite">Ready when you are. Results appear only after an actual check.</p>
+        </section>
+        <div class="metric-grid" aria-label="Latest check statistics">
+          <div class="metric">
+<span>Targets checked</span>
+<strong id="metric-targets">—</strong>
+<small>Latest check</small>
+</div>
+          <div class="metric">
+<span>Reachable</span>
+<strong id="metric-reachable">—</strong>
+<small>Matching Echo Replies</small>
+</div>
+          <div class="metric">
+<span>Packet loss</span>
+<strong id="metric-loss">—</strong>
+<small>Sent requests without replies</small>
+</div>
+          <div class="metric">
+<span>Elapsed time</span>
+<strong id="metric-elapsed">—</strong>
+<small>All targets checked together</small>
+</div>
+        </div>
+        <section class="panel results-panel">
+          <div class="section-heading">
+<div>
+<p class="eyebrow">02 / OBSERVATIONS</p>
+<h2>Device results</h2>
+</div>
+<button id="download" class="quiet-button" disabled>Save results ↓</button>
+</div>
+          <div id="results-empty" class="empty-state">
+<div class="empty-icon">⌁</div>
+<h3>No measurements yet</h3>
+<p>Run a check to see reachability, packet loss and response times.</p>
+</div>
+          <div id="results-wrap" class="table-scroll" hidden>
+<table>
+<thead>
+<tr>
+<th>Target address</th>
+<th>Observed status</th>
+<th>Replies / sent</th>
+<th>Packet loss</th>
+<th>Average RTT</th>
+</tr>
+</thead>
+<tbody id="results">
+</tbody>
+</table>
+</div>
+          <p id="checked-at" class="timestamp" hidden>
+</p>
+        </section>
+        <section class="panel chart-panel">
+          <div class="section-heading">
+<div>
+<p class="eyebrow">03 / PERFORMANCE</p>
+<h2>Round-trip time <span id="chart-target">
+</span>
+</h2>
+</div>
+<span class="chart-key">
+<i>
+</i> Echo Reply RTT</span>
+</div>
+          <div id="chart-empty" class="chart-empty">Select a measured target to inspect its response times.</div>
+          <div id="chart" hidden>
+</div>
+          <div class="rtt-stats">
+<span>Minimum <b id="rtt-min">—</b>
+</span>
+<span>Average <b id="rtt-avg">—</b>
+</span>
+<span>Maximum <b id="rtt-max">—</b>
+</span>
+</div>
+                  </section>
+        <section class="panel details-panel">
+<div class="section-heading">
+<div>
+<p class="eyebrow">04 / PACKET DETAILS</p>
+<h2>Probe results</h2>
+</div>
+</div>
+<div id="details" class="detail-empty">Choose a target from the results table to inspect every probe.</div>
+</section>
+      </div>
+    </section>
+    <footer>
+<span>ICMP Network Lab <b>·</b> Tarun Ram / 24BBS0181</span>
+<span>Local network monitoring · IPv4</span>
+</footer>
+  </main>
+</body>
+</html>

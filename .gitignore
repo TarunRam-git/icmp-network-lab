@@ -1,0 +1,20 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.runtime/
+
+# Local coursework reports and captures
+reports/
+evidence/
+docs/
+
+# Earlier desktop prototype
+gui.py
+test_gui.py
+
+# Local configuration
+.env
+.env.*
+*.log
